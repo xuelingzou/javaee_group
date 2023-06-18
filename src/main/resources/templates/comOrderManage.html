@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="/Sys/css/layui.css">
+    <link rel="stylesheet" href="/Sys/css/sign.css">
+
+    <link rel="stylesheet"
+          href="/Sys/js/css/modules/layui-icon-extend/iconfont.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/Sys/css/font.css">
+    <link rel="stylesheet" href="/Sys/css/xadmin.css">
+    <script type="text/javascript"
+            src="/Sys/js/jquery-3.3.1.min.js"></script>
+    <script src="/Sys/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src = "/Sys/js/jquery.table2excel.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-nav">
+
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+
+
+
+<table id="test" lay-filter="test"></table>
+
+</body>
+<script type="text/html" id="barDemo">
+
+    {{#  if(d.state ==="已接单"){    }}
+    <a class="layui-btn layui-btn-xs" lay-event="send">发货</a>
+    {{#   } else if(d.state ==="已发货"){  }}
+    <a class="layui-btn layui-btn-xs" lay-event="finish">送达</a>
+    {{#    } else if(d.state ==="已到达"){    }}
+        完成
+    {{#    }   }}
+
+</script>
+
+
+<script >
+    var documentWidth = $(document).width();
+    layui.use(['table','form',"laytpl"],function(){
+        const table = layui.table;
+        const laytpl = layui.laytpl;
+        table.render({
+            elem: '#test'  //绑定table表格
+            ,id:'csInfo'
+            ,method:'post'
+            ,url: 'findOrderByCoid' //后台springmvc接收路径
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                ,groups: 1 //只显示 1 个连续页码
+                ,first: false //不显示首页
+                ,last: false //不显示尾页
+                ,limit:10
+                ,limits:[10,20,30]
+            }
+            ,cols: [
+                [
+                    {type: 'checkbox',width:documentWidth*4/100,fixed: 'left'}
+                    ,{field:'oid',title:'订单ID', sort: true,width: 100,fixed: 'left'}
+                    ,{field:'senderName',title:'发件⼈名', sort:true,width: 150}
+                    ,{field:'senderPhone',title:'发件⼈电话',sort:true,width: 150}
+                    ,{field:'departure',title:'发件地址',sort:true,width: 150}
+                    ,{field:'receiveName',title:'收件⼈名',sort:true,width: 150}
+                    ,{field:'receivePhone',title:'收件⼈电话',sort:true,width: 150}
+                    ,{field:'destination',title:'收件地址',sort:true,width: 150}
+                    ,{field:'cargoType',title:'货物种类',sort:true,width: 150}
+                    ,{field:'weight',title:'货物重量',sort:true,width: 150}
+                    ,{field:'volume',title:'货物体积',sort:true,width: 150}
+                    ,{field:'cost',title:'运费',sort:true,width: 150}
+                    ,{field:'state',title:'状态',sort:true,width: 150}
+                    ,{field:'submitTime',title:'提交订单时间',sort:true,width: 150}
+                    ,{field:'sendTime',title:'发货时间',sort:true,width: 150}
+                    ,{field:'receiveTime',title:'到达时间',sort:true,width: 150}
+
+                    ,{fixed: 'right',  align:'center', toolbar: '#barDemo'}
+
+                ]
+            ]
+        }); //table
+
+        //工具条事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            const data = obj.data; //获得当前行数据
+            const layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            const tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+            const oid =  data.oid
+
+            if(layEvent === 'send'){ //发货
+
+                layer.confirm('是否确定发货？', function(index){
+                    //向服务端发送发货指令
+                    $.ajax({
+                        url:'sendCargo',
+                        data:{'oid':oid},
+                        type:'post',
+                        success:function(data){
+                            if(data==="发货成功"){
+                                parent.layer.msg('发货成功！', {icon: 1,time:2000,shade:0.2});
+                                window.location.reload(true);
+                            }else{
+                                parent.layer.msg('发货失败，请稍后尝试！', {icon: 2,time:3000,shade:0.2});
+                            }
+                        }
+                    });//ajax
+                });//layer.confirm
+            } else if (layEvent === 'finish'){//送达
+                layer.confirm('是否确定货物已送达？', function(index){
+
+                    //向服务端发送送达指令
+                    $.ajax({
+                        url:'receiveCargo',
+                        data:{'oid':oid},
+                        type:'post',
+                        success:function(data){
+                            if(data==="货物已送达"){
+                                parent.layer.msg('货物已送达！', {icon: 1,time:2000,shade:0.2});
+                                window.location.reload(true);
+                            }else{
+                                parent.layer.msg('货物送达失败，请稍后尝试！', {icon: 2,time:3000,shade:0.2});
+                            }
+                        }
+                    });//ajax
+
+                });//layer.confirm
+            }
+
+            var d = {
+                state:data.state
+            }
+            const barDemo = document.getElementById('barDemo');
+            const getTpl = barDemo.innerHTML
+            laytpl(getTpl).render(d);
+
+        });//工具条事件
+
+
+
+        $('.layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+
+</script>
+
+</html>
