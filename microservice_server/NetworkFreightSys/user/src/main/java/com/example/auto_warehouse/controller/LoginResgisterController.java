@@ -16,7 +16,7 @@ import com.example.auto_warehouse.service.CompanyService;
 
 
 import com.example.auto_warehouse.util.JsonResult;
-import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +25,8 @@ import com.alibaba.fastjson.JSON;
 
 import cn.hutool.crypto.SecureUtil;
 
+import javax.servlet.http.HttpSession;
+@Slf4j
 @RestController
 @RequestMapping("/Sys")
 public class LoginResgisterController {
@@ -42,6 +44,7 @@ public class LoginResgisterController {
     @ResponseBody
 	@PostMapping(value = "/v1/users/login")
 	public String getInfo(@RequestBody Map<String,String> map, HttpSession httpSession) {
+		log.info("sleuth跟踪日志");
 		String identify = map.get("identify");
 		String num = map.get("num");
 		String psw = map.get("psw");
@@ -94,6 +97,7 @@ public class LoginResgisterController {
 	@PostMapping(value = "/v1/companies")
 	@ResponseBody
 	public JsonResult<Company> registerCompanyDeal(@RequestBody Map<String,String> map) {
+		log.info("sleuth跟踪日志");
 		System.out.println("company psw:"+map.get("psw"));
 		map.put("psw", SecureUtil.md5(map.get("psw")));
 		if (companyService.addCompany(map) > 0) {
@@ -107,6 +111,7 @@ public class LoginResgisterController {
 	@PostMapping(value = "/v1/clients")
 	@ResponseBody
 	public JsonResult<Client> registerClientDeal(@RequestBody Map<String,String> map) {
+		log.info("sleuth跟踪日志");
 		System.out.println("client psw:"+map.get("psw"));
 		map.put("psw", SecureUtil.md5(map.get("psw")));
 		

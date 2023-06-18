@@ -9,7 +9,6 @@
         <module>gateway</module>
         <module>order</module>
         <module>nativeConfigServer</module>
-        <module>sleuth</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

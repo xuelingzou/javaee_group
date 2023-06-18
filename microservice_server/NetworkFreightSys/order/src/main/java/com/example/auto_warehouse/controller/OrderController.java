@@ -60,6 +60,7 @@ public class OrderController {
         System.out.println(ceid);
         order.setCeid(ceid); //客户id
         order.setCost(order.getWeight(),order.getVolume());
+        log.info("sleuth跟踪日志");
         if(orderMapper.addOrder(order)>0){
             return new JsonResult<>(HttpStatus.HTTP_CREATED,"提交订单成功",order);
         }else{
@@ -75,6 +76,7 @@ public class OrderController {
     public JsonResult<Order> updateOrderState(@PathVariable("oid") String oid1, @RequestBody Map<String,String> map) throws ParseException {
         int oid = Integer.parseInt(oid1);
         String coid = map.get("coid");
+        log.info("sleuth跟踪日志");
         // 接单
         if(map.get("state").equals("接单")){
             // 获取当前货运公司的coid
@@ -220,6 +222,7 @@ public class OrderController {
         int total = list.size();
 //        Layui l = Layui.data(HttpStatus.HTTP_OK,"",total,list);
         Layui l = Layui.data(Integer.toString(HttpStatus.HTTP_OK) ,total,list);
+        log.info("sleuth跟踪日志");
         return JSON.toJSONString(l);
 //        return new JsonResult<>(HttpStatus.HTTP_OK,l);
     }
@@ -266,6 +269,7 @@ public class OrderController {
         }
         int total = list.size();
         Layui l = Layui.data(String.valueOf(HttpStatus.HTTP_OK),total,list);
+        log.info("sleuth跟踪日志");
         return JSON.toJSONString(l);
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
     }
@@ -302,6 +306,7 @@ public class OrderController {
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
         int total = list.size();
         Layui l = Layui.data(String.valueOf(HttpStatus.HTTP_OK),total,list);
+        log.info("sleuth跟踪日志");
         return JSON.toJSONString(l);
     }
 
@@ -347,7 +352,7 @@ public class OrderController {
         }
         int total = list.size();
         Layui l = Layui.data(String.valueOf(HttpStatus.HTTP_OK),total,list);
-        log.info("测试日志");
+        log.info("sleuth跟踪日志");
         return JSON.toJSONString(l);
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
     }
@@ -396,6 +401,7 @@ public class OrderController {
 
         int total = list.size();
         Layui l = Layui.data(String.valueOf(HttpStatus.HTTP_OK),total,list);
+        log.info("sleuth跟踪日志");
         return JSON.toJSONString(l);
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
     }
@@ -445,6 +451,7 @@ public class OrderController {
 
         int total = list.size();
         Layui l = Layui.data(String.valueOf(HttpStatus.HTTP_OK),total,list);
+        log.info("sleuth跟踪日志");
         return JSON.toJSONString(l);
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
     }
@@ -455,6 +462,7 @@ public class OrderController {
     @PostMapping("/v1/logistics")
 //    public JsonResult<Logistics> addLogistics(@RequestParam("oid")String oid1,@RequestParam("location")String location){
     public JsonResult<Logistics> addLogistics(@RequestBody Map<String,String> map1){
+        log.info("sleuth跟踪日志");
         String oid1 = map1.get("oid");
         String location = map1.get("location");
         int oid = Integer.parseInt(oid1);
@@ -471,6 +479,7 @@ public class OrderController {
     @GetMapping("/v1/logistics/{oid}")
     @ResponseBody
     public String showAllLogisticsByOid(@PathVariable("oid") String oid){
+        log.info("sleuth跟踪日志");
         List<Logistics> logistics_list = orderMapper.showAllLogisticsByOid(Integer.parseInt(oid));
         List<Map<String, String>> list = new ArrayList<>();
         DateFormat dateformat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
