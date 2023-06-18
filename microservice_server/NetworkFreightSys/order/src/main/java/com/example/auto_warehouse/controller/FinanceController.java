@@ -7,6 +7,7 @@ import com.example.auto_warehouse.bean.Income;
 import com.example.auto_warehouse.service.IncomeService;
 
 import com.example.auto_warehouse.util.JsonResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import com.alibaba.fastjson.JSON;
 
 import javax.servlet.http.HttpSession;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/Sys")
 public class FinanceController {
@@ -28,6 +29,7 @@ public class FinanceController {
 	@PostMapping ("/v1/incomes")
 	@ResponseBody
 	public JsonResult<double[]> getGscomp(HttpSession httpSession, @RequestBody Map<String,String> map1) {
+		log.info("sleuth跟踪日志");
 		String coid = (String) httpSession.getAttribute( "account");
 		int year = Integer.parseInt(map1.get("year"));
 		List<Income> incomes = incomeService.selectMonthIncome(coid,year*100);

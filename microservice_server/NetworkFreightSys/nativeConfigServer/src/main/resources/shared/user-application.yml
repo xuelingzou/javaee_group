@@ -5,6 +5,16 @@ spring:
     password: Zjq123789
   application:
     name: user
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      probability: 1.0
+      rate: 100
+  zipkin:
+    base-url: http://localhost:9090/
+    discovery-client-enabled: false
 
 server:
   port: 8081

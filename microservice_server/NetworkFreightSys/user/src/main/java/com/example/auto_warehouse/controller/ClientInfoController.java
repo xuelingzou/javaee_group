@@ -12,6 +12,7 @@ import com.example.auto_warehouse.util.JsonResult;
 import com.example.auto_warehouse.util.Layui;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import com.alibaba.fastjson.JSON;
 
 
 import cn.hutool.crypto.SecureUtil;
-
+@Slf4j
 @RestController
 @RequestMapping("/Sys")
 public class ClientInfoController {
@@ -34,6 +35,7 @@ public class ClientInfoController {
 	@GetMapping(value = "/v1/clients")
 	@ResponseBody
 	public String getClientInfo(@RequestBody Map<String,String> map1) {
+		log.info("sleuth跟踪日志");
 		int lim = Integer.parseInt(map1.get("limit"));
 		int start = (Integer.parseInt(map1.get("page")) - 1) * lim;
 		mylim = lim;
@@ -55,6 +57,7 @@ public class ClientInfoController {
 	@GetMapping(value = "/v1/clients/simple")
 	@ResponseBody
 	public String getClientSimpleInfo(@RequestParam("limit") String limit, @RequestParam("page") String page) {
+		log.info("sleuth跟踪日志");
 //		int lim = Integer.parseInt(map1.get("limit"));
 //		int start = (Integer.parseInt(map1.get("page")) - 1) * lim;
 		int lim = Integer.parseInt(limit);
@@ -89,6 +92,7 @@ public class ClientInfoController {
 	public String getClientByName(@PathVariable("ceName") String ceName, @RequestParam("limit") String limit, @RequestParam("page") String page) {
 //		int lim = Integer.parseInt(map1.get("limit"));
 //		int start = (Integer.parseInt(map1.get("page")) - 1) * lim;
+		log.info("sleuth跟踪日志");
 		int lim = Integer.parseInt(limit);
 		int start = (Integer.parseInt(page) - 1) * lim;
 		mylim = lim;
@@ -117,6 +121,7 @@ public class ClientInfoController {
 	@GetMapping("/v1/clients/ceid/{ceid}")
 	@ResponseBody
 	public String getClientByNum(@PathVariable("ceid") String ceid) {
+		log.info("sleuth跟踪日志");
 		List<Client> ClientList = new ArrayList<>();
 		ClientList = clientService.findClientByNum(ceid);
 		int total = ClientList.size();
@@ -154,6 +159,7 @@ public class ClientInfoController {
 //		}
 //		map.put("oldNum",oldNum);
 		//String psw1 = SecureUtil.md5(psw);
+		log.info("sleuth跟踪日志");
 		if(clientService.updateClient(map)>0){
 			return new JsonResult<>(HttpStatus.HTTP_OK,"success");
 		}else{
@@ -167,6 +173,7 @@ public class ClientInfoController {
 //	public JsonResult<Object> deleteClients(@RequestBody Map<String,String> map1) {
 	public JsonResult<Object> deleteClients(@RequestParam("nums") String datas) {
 //		String datas = map1.get("nums").toString();
+		log.info("sleuth跟踪日志");
 		System.out.println(datas);
 		String[] str = datas.split(",");
 		List<String> data = new ArrayList<String>();
@@ -186,6 +193,7 @@ public class ClientInfoController {
 	@DeleteMapping("/v1/clients/{ceid}")
 	@ResponseBody
 	public JsonResult<Object> deleteClient(@PathVariable("ceid") String ceid) {
+		log.info("sleuth跟踪日志");
 		if (clientService.deleteClient(ceid) > 0) {
 			return new JsonResult<>(HttpStatus.HTTP_NO_CONTENT,"success");
 		} else {

@@ -34,6 +34,7 @@ public class CompanyInfoController {
 	@GetMapping(value = "/v1/companies")
 	@ResponseBody
 	public String getCompanyInfo(@RequestBody Map<String,String> map1) {
+		log.info("sleuth跟踪日志");
 		int lim = Integer.parseInt(map1.get("limit"));
 		int start = (Integer.parseInt(map1.get("page")) - 1) * lim;
 		Map<String, Object> map = new HashMap<>();
@@ -52,6 +53,7 @@ public class CompanyInfoController {
 	public String getCompanySimpleInfo(@RequestParam("limit") String limit, @RequestParam("page") String page) {
 //		int lim = Integer.parseInt(map1.get("limit"));
 //		int start = (Integer.parseInt(map1.get("page")) - 1) * lim;
+		log.info("sleuth跟踪日志");
 		int lim = Integer.parseInt(limit);
 		int start = (Integer.parseInt(page) - 1) * lim;
 		Map<String, Object> map = new HashMap<>();
@@ -79,6 +81,7 @@ public class CompanyInfoController {
 	public String getCompanyByName(@PathVariable("coName") String coName, @RequestParam("limit") String limit, @RequestParam("page") String page) {
 //		int lim = Integer.parseInt(map1.get("limit"));
 //		int start = (Integer.parseInt(map1.get("page")) - 1) * lim;
+		log.info("sleuth跟踪日志");
 		int lim = Integer.parseInt(limit);
 		int start = (Integer.parseInt(page) - 1) * lim;
 		if (coName.equals("")) {
@@ -104,6 +107,7 @@ public class CompanyInfoController {
 	@DeleteMapping("/v1/companies")
 	@ResponseBody
 	public JsonResult<Object> deleteCompanys(@RequestParam("nums") String datas) {
+		log.info("sleuth跟踪日志");
 		//String datas = map1.get("nums").toString();
 		System.out.println(datas);
 		String[] str = datas.split(",");
@@ -124,6 +128,7 @@ public class CompanyInfoController {
 	@DeleteMapping("/v1/companies/{coid}")
 	@ResponseBody
 	public JsonResult<Object> deleteCompany(@PathVariable("coid") String coid) {
+		log.info("sleuth跟踪日志");
 		if (companyService.deleteCompany(coid) > 0) {
 			return new JsonResult<>(HttpStatus.HTTP_NO_CONTENT,"success");
 		} else {
@@ -135,6 +140,7 @@ public class CompanyInfoController {
 	@GetMapping("/v1/companies/coid/{coid}")
 	@ResponseBody
 	public String getCompanyByNum(@PathVariable("coid") String coid) {
+		log.info("sleuth跟踪日志");
 		String CompanyNo = coid.toString();
 		List<Company> companyList = new ArrayList<>();
 		companyList = companyService.getCompanyByNum(CompanyNo);
@@ -170,7 +176,7 @@ public class CompanyInfoController {
 //		}
 //		map.put("oldNum",oldNum);
 
-
+		log.info("sleuth跟踪日志");
 
 		if(companyService.updateCompany(map)>0){
 			return new JsonResult<>(HttpStatus.HTTP_OK,"success");
