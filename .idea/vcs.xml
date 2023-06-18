@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/first_homework" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/first_homework/networkFreightSys-master" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fourth_homework/microservice_server/NetworkFreightSys" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fourth_homework/web" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/second_homework/networkFreightSys-master" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_homework/microservice_server/NetworkFreightSys" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_homework/web" vcs="Git" />
+  </component>
+</project>
