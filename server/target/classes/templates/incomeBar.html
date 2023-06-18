@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<link rel="stylesheet" href="/Sys/css/layui.css">
+<link rel="stylesheet" href="/Sys/css/sign.css">
+
+<link rel="stylesheet"
+	href="/Sys/js/css/modules/layui-icon-extend/iconfont.css">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="/Sys/css/font.css">
+<link rel="stylesheet" href="/Sys/css/xadmin.css">
+
+<script type="text/javascript"
+	src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/Sys/lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<script type="text/javascript" src="/Sys/js/echarts.js"></script>
+
+<body>
+
+	<div class="x-nav">
+		<a class="layui-btn layui-btn-small"
+			style="line-height: 1.6em; margin-top: 3px; float: right"
+			href="javascript:location.replace(location.href);" title="刷新"> <i
+			class="layui-icon" style="line-height: 30px">ဂ</i>
+		</a>
+	</div>
+
+	<div class="x-body">
+		<div class="layui-row">
+
+
+
+			<div class="layui-form-item">
+
+<!--				<label class="layui-form-label">选择年级：</label>-->
+<!--				<div class="layui-input-inline layui-form">-->
+<!--					<select lay-filter="grade">-->
+<!--						<option value="2016">2016</option>-->
+<!--						<option value="2017">2017</option>-->
+<!--						<option value="2018">2018</option>-->
+<!--					</select>-->
+<!--				</div>-->
+
+				<div class="demoTable" style="margin-bottom: 20px">
+					年份：
+					<div class="layui-inline">
+						<input class="layui-input" name="id" id="demoReload" autocomplete="off">
+					</div>
+					<button class="layui-btn" data-type="reload" ><i class="layui-icon">&#xe615;</i></button>
+				</div>
+
+
+
+
+
+			</div>
+
+			<table id="test" lay-filter="test"></table>
+		</div>
+
+		<!--条形图-->
+		<div id="main" style="width: 600px; height: 400px;"></div>
+
+	</div>
+</body>
+
+
+
+
+<script type="text/javascript" >
+	// var grade = "2016";
+	// var coursename = "java";
+	let year = '2023';
+
+	var chart = document.getElementById('main');
+	var echart = echarts.init(chart);
+
+
+	//生成图形
+	function buildChart(columName, columnValue) {
+		var option = {
+			tooltip : {
+				trigger : 'axis',
+				axisPointer : {
+					type : 'shadow'
+				}
+			},
+			toolbox : {
+				show : true,
+				feature : {
+					saveAsImage : {
+						show : true
+					}
+				}
+			},
+			legend : {
+				data : [year+"年月收入"]
+			},
+			grid : {
+				left : '3%',
+				right : '4%',
+				bottom : '3%',
+				containLabel : true
+			},
+			xAxis : [ {
+				length: 12,
+				axisTick: {
+					alignWithLabel: true,
+					interval :'0'
+				},
+				axisLabel:{
+					show : true
+				},
+				min : 0,
+				type : 'category',
+				data : columName
+			} ],
+			yAxis : [ {
+				min : 0,
+				type : 'value'
+			} ],
+			series: [{
+				name: year+"年月收入",
+				type: 'bar',
+				data: columnValue,
+				itemStyle: {
+					normal: {
+						label: {
+							show: true,
+							position: 'top'
+						}
+					}
+				}
+
+
+			}]
+			// series : columnValue
+				// itemStyle: {
+				// 	normal: {
+				// 		label: {
+				// 			show: true,
+				// 			position: 'top'
+				// 		}
+				// 	}
+				// }
+			// }
+	};
+	
+	echart.setOption(option,true);
+}
+
+	$.ajax({
+		type: "post",
+		async: true, //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+		url: "getGscomp", //请求发送到TestServlet处
+		data: {
+			"year": year,
+
+		},
+		dataType: "json", //返回数据形式为json
+		success: function (result) {
+
+			var columName = ['一月', '二月', '三月', "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+			// var columnValue = new Array();
+			const columnValue = result;
+
+
+
+
+			buildChart(columName, columnValue);
+
+		},
+		error: function (errorMsg) {
+			//请求失败时执行该函数
+			alert("图表请求数据失败!");
+			echart.hideLoading();
+		}
+	});
+
+
+
+	layui.use([ 'table'], function() {
+		// var form = layui.form;
+		// const laydate = layui.laydate;
+
+
+		//根据名称查询
+		const $ = layui.$, active = {
+			reload: function () {
+				year = $('#demoReload').val();
+
+				$.ajax({
+					type: "post",
+					async: true, //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+					url: "getGscomp", //请求发送到TestServlet处
+					data: {
+						"year": year,
+
+					},
+					dataType: "json", //返回数据形式为json
+					success: function (result) {
+
+						var columName = ['一月', '二月', '三月', "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+						// var columnValue = new Array();
+						const columnValue = result;
+
+
+						buildChart(columName, columnValue);
+
+					},
+					error: function (errorMsg) {
+						//请求失败时执行该函数
+						alert("图表请求数据失败!");
+						echart.hideLoading();
+					}
+				});
+
+			}
+		};
+
+		$('.demoTable .layui-btn').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		});
+
+
+
+
+	});
+</script>
+
+
+
+</html>

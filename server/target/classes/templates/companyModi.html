@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+    
+    <link rel="stylesheet" href="/Sys/css/layui.css">
+    <link rel="stylesheet" href="/Sys/css/sign.css">
+    
+    <link rel="stylesheet" href="/Sys/js/css/modules/layui-icon-extend/iconfont.css">
+     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/Sys/css/font.css">
+	<link rel="stylesheet" href="/Sys/css/xadmin.css">
+	<link rel="stylesheet" href="/Sys/css/formSelects-v4.css" />
+<script type="text/javascript"
+	src="/Sys/js/jquery-3.3.1.min.js"></script>
+    <script src="/Sys/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+        <script src="/Sys/js/formSelects-v4.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+<body class="layui-unselect lau-sign-body" style="padding-top: 0px " >
+
+<form action="" class="layui-form">
+
+
+    <div class="layui-form-item" >
+        <div class="layui-inline">
+            <label class="layui-form-label" ><i class="iconfont layui-icon-extend-bianhao" >承运商ID</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="coid" name="coid" placeholder="请输入承运商ID" autocomplete="off" class="layui-input" >
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label"><i class="iconfont layui-icon-extend-ziyuan"></i>承运商名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="coName" name="coName" placeholder="请输入承运商名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label"><i class="layui-icon layui-icon-password"></i>密码</label>
+            <div class="layui-input-block">
+                <input type="psw" id="psw" name="psw" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-inline">
+            <label class="layui-form-label"><i class="iconfont layui-icon-extend-icon-test"></i>手机号</label>
+            <div class="layui-input-block">
+                <input type="text" id="phone" name="phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="layui-form-item lau-sign-other" style="margin-top: 20px;text-align:center">
+        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="updateTea" style="margin-right: 100px">提交</button>
+       
+    </div>
+
+</form>
+
+</body>
+<script src="/Sys/lib/layui/layui.js"></script>
+<script th:inline="javascript">
+   $(function(){
+	   
+	   var num= [[${num}]];
+		  $.ajax({
+			  url:'getCompanyByNum',
+			  type:'POST',
+			  data:{'num':num},
+		  	  success:function(data){
+		  		var datajson = JSON.parse(data)
+
+		  		$("#coid").val(datajson.data[0].coid)
+		  		$('#coName').val(datajson.data[0].coName)
+		  		$('#phone').val(datajson.data[0].phone)
+		  		
+		  	  }
+		  });
+
+	    layui.use(['jquery','form'], function() {
+	           var form = layui.form;
+	           //监听提交
+	           form.on('submit(updateTea)', function(data) {
+	               var updateJson= data.field;
+	                updateJson.oldNum = num;
+					data=JSON.stringify(updateJson)
+					$.ajax({
+		               	 url : 'updateCompany',
+		                 data : data,
+		                 type:'POST',
+		                 contentType: 'application/json',
+		                 success:function(data){
+		               	     if(data ==='success'){
+		               	         layer.msg("修改成功！")
+		               	     }
+
+		                 },
+		                 error:function(args){
+		                	 layer.msg("承运商ID已经存在，修改失败！",function(){
+		                         
+		                     });
+		                 }
+		               	});
+	              		
+	           });
+	       });   
+   });
+   
+</script>
+</html>

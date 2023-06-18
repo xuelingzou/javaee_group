@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhengyuan.liunao.repository.IncomeMapper">
+
+	<update id="updateIncome" parameterType="com.zhengyuan.liunao.entity.Income">
+		update myscoremanage. income set income = income+#{money}
+		where companyID = #{companyID} and yearMonth = #{yearMonth}
+	</update>
+	<update id="insertIncome" parameterType="com.zhengyuan.liunao.entity.Income">
+		insert myscoremanage.income(companyID,yearMonth,income) values(#{companyID},#{yearMonth},#{income})
+	</update>
+	<select id = "findByYearMonth" resultType="com.zhengyuan.liunao.entity.Income">
+		select * from myscoremanage. income where companyID = #{companyID} and yearMonth = #{yearMonth}
+	</select>
+	<select id="selectMonthIncome" resultType="com.zhengyuan.liunao.entity.Income">
+		select * from myscoremanage. income where companyID = #{companyID} and yearMonth between #{year} and #{year}+100
+	</select>
+	
+
+</mapper>
+
+
+
