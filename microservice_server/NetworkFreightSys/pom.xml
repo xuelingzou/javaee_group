@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>user</module>
+        <module>security</module>
+        <module>eureka</module>
+        <module>gateway</module>
+        <module>order</module>
+        <module>nativeConfigServer</module>
+        <module>sleuth</module>
+    </modules>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.0</version>
+<!--        <version>3.0.5</version>-->
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>NetworkFreightSys</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>NetworkFreightSys</name>
+    <description>NetworkFreightSys</description>
+    <!-- 父pom.xml中的必须为pom类型 便于子模块之间传递依赖 -->
+    <packaging>pom</packaging>
+    <properties>
+        <java.version>8</java.version>
+    </properties>
+
+    <dependencyManagement>
+        <!--dependencyManagement在多模块项目中统一管理依赖版本问题-->
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2020.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+</project>

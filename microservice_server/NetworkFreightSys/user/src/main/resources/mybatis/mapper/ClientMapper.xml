@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auto_warehouse.mapper.ClientMapper">
+	<select id="findClient" resultType="com.example.auto_warehouse.bean.Client">
+		select * from myscoremanage.client where ceid=#{0} and psw = #{1}
+	</select>
+
+	<select id="findAllClient" resultType="com.example.auto_warehouse.bean.Client">
+		select * from myscoremanage. client limit #{start},#{pagesize}
+	</select>
+
+	<insert id="addClient">
+		insert into myscoremanage.client(ceid,ceName,psw,phone)
+		values(#{ceid},#{ceName},#{psw},#{phone})
+	</insert>
+
+	<select id="findClientByName" resultType="com.example.auto_warehouse.bean.Client">
+		select * from myscoremanage. client where ceName like CONCAT(CONCAT('%',#{0}),'%') limit #{1},#{2}
+	</select>
+
+	<select id="ClientCount" resultType="Integer">
+		select count(ceid) from myscoremanage.client
+	</select>
+
+	<select id="findClientByNum" resultType="com.example.auto_warehouse.bean.Client">
+		select * from myscoremanage.client where ceid= #{ceid}
+	</select>
+    
+    
+    <update id="updateClient">
+		update myscoremanage.client
+		 <trim prefix="set" suffixOverrides=",">
+			  <if test="ceid!=null">ceid=#{ceid},</if>
+			  <if test="ceName!=null">ceName=#{ceName},</if>
+			  <if test="psw!=null">psw=#{psw},</if>
+			  <if test="phone!=null">phone=#{phone},</if>
+		 </trim>
+		WHERE ceid in (select ceid from (select ceid from myscoremanage.client where ceid = #{oldNum}) t1 )
+	</update>
+
+	<delete id="deleteByForeach">
+		delete from myscoremanage. client where ceid in
+		<foreach collection="list" item="num" open="(" close=")" separator=",">
+			#{num}
+		</foreach>
+	</delete>
+
+	<delete id="deleteClient">
+		delete from myscoremanage.client where ceid = #{0}
+	</delete>
+
+</mapper>

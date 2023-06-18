@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auto_warehouse.mapper.OrderMapper">
+
+    <insert id="addOrder">
+        insert into myscoremanage.order (ceid, senderName, senderPhone, departure, receiveName, receivePhone, destination, cargoType, weight, volume, cost, state, submitTime)
+        values(#{ceid}, #{senderName}, #{senderPhone}, #{departure}, #{receiveName}, #{receivePhone}, #{destination}, #{cargoType}, #{weight}, #{volume}, #{cost}, #{state}, #{submitTime});
+    </insert>
+
+    <update id="updateCoidNState">
+        update myscoremanage.order set coid = #{coid}, state="已接单"
+        where oid=#{oid};
+    </update>
+    <update id="updateSendTNState">
+        update myscoremanage.order set sendTime = #{sendTime}, state="已发货"
+        where oid=#{oid};
+    </update>
+    <update id="updateReceiveTNState">
+        update myscoremanage.order set receiveTime=#{receiveTime}, state="已到达"
+        where oid=#{oid};
+    </update>
+
+    <select id="findOrderByCeid" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order
+        where ceid=#{ceid};
+    </select>
+    <select id="findOrderByCoid" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order
+        where coid=#{coid};
+    </select>
+    <select id="findOrderByOid" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order
+        where oid=#{oid};
+    </select>
+    <select id="findOrderWaitReceive" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order
+        where  state="待接单";
+    </select>
+    <select id="showAllOrder" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order;
+    </select>
+    <select id="findOrderOid" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order where oid=#{oid};
+    </select>
+    <select id="findOrderByCargotype" resultType="com.example.auto_warehouse.bean.Order">
+        select * from myscoremanage.order where cargoType=#{cargoType} and coid=#{coid};
+    </select>
+
+    <insert id="addLogistics" parameterType="com.example.auto_warehouse.bean.Logistics">
+        insert into myscoremanage.logistics (oid, recordTime, location)
+        values(#{oid}, #{recordTime}, #{location});
+    </insert>
+    <select id="showAllLogisticsByOid" resultType="com.example.auto_warehouse.bean.Logistics">
+        select * from myscoremanage.logistics where oid=#{oid} order by recordTime desc
+    </select>
+</mapper>

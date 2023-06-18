@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.auto_warehouse.mapper.CompanyMapper">
+    <select id="findCompany" resultType="com.example.auto_warehouse.bean.Company">
+      select * from myscoremanage.company where coid=#{0} and psw=#{1}
+    </select>
+
+	<insert id="addCompany" >
+        insert into myscoremanage.company(coid,coName,psw,phone)values (#{coid},#{coName},#{psw},#{phone})
+    </insert>
+
+	<select id="findAllCompany" resultType="com.example.auto_warehouse.bean.Company">
+      select * from myscoremanage. company limit #{start},#{pagesize}
+    </select>
+
+	<select id="findAll" resultType="com.example.auto_warehouse.bean.Company">
+      select * from myscoremanage.company
+    </select>
+    
+	<select id="findCompanyByName" resultType="com.example.auto_warehouse.bean.Company">
+        select * from myscoremanage. company where coName like CONCAT(CONCAT('%',#{0}),'%') limit #{1},#{2}
+    </select>
+
+
+	<select id="companyCount" resultType="Integer">
+		select count(coid) from myscoremanage.company
+    </select>
+	
+	
+	<select id="echartCompany" resultType="com.example.auto_warehouse.bean.Company">
+        select * from myscoremanage.company
+    </select>
+    
+ 	<delete id="deleteByForeach">
+		delete from myscoremanage. company where coid in
+		<foreach collection="list" item="num" open="(" close=")" separator=",">
+			#{num}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteCompany">
+	 	delete  from myscoremanage.company where coid = #{0}
+	</delete>
+
+	<select id = "getCompanyByNum" resultType="com.example.auto_warehouse.bean.Company">
+		select * from myscoremanage.company where coid= #{coid}
+	</select>
+	
+	<update id="updateCompany">
+		update myscoremanage.company
+		 <trim prefix="set" suffixOverrides=",">
+			  <if test="coid!=null">coid=#{coid},</if>
+			  <if test="coName!=null">coName=#{coName},</if>
+			  <if test="psw!=null">psw=#{psw},</if>
+			  <if test="phone!=null">phone=#{phone},</if>
+		 </trim>
+		WHERE coid in (select coid from (select coid from myscoremanage.company where coid = #{oldNum}) t1 )
+	</update>
+
+
+</mapper>
