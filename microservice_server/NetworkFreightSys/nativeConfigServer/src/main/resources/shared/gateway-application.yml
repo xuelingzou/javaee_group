@@ -21,6 +21,12 @@ spring:
             - Path=/order/**
           filters:
             - StripPrefix=1
+        - id: logistics
+          uri: http://localhost:8083
+          predicates:
+            - Path=/logistics/**
+          filters:
+            - StripPrefix=1
 
 
 # eureka配置 客户端配置，注册到服务中心

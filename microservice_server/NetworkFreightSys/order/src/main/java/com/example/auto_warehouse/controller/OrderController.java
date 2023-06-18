@@ -17,19 +17,31 @@ import com.example.auto_warehouse.util.JsonResult;
 import com.example.auto_warehouse.util.Layui;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Slf4j
 @RestController
 @RequestMapping("/Sys")
 public class OrderController {
+
+    private final WebClient.Builder clientBuilder;
+
+    @Autowired
+    public OrderController(WebClient.Builder clientBuilder) {
+        this.clientBuilder = clientBuilder;;
+    }
+
 
     @Autowired
     private OrderMapper orderMapper;
@@ -457,7 +469,7 @@ public class OrderController {
     }
 
 
-    // 承运商记录货物运输信息
+    // 承运商记录货物运输信息（调用logistics服务）
     @ResponseBody //加这个注解，则直接返回数据，而不是模板路径
     @PostMapping("/v1/logistics")
 //    public JsonResult<Logistics> addLogistics(@RequestParam("oid")String oid1,@RequestParam("location")String location){
@@ -465,35 +477,39 @@ public class OrderController {
         log.info("sleuth跟踪日志");
         String oid1 = map1.get("oid");
         String location = map1.get("location");
-        int oid = Integer.parseInt(oid1);
-        Date now = new Date();
-        Logistics logistics = new Logistics(oid,now,location);
-        if(orderMapper.addLogistics(logistics)>0){
+        String s = oid1+","+location;
+
+        Mono<String> momoStr = clientBuilder
+                .baseUrl("http://logistics")//指定url，service-1是我们注册的微服务applications.name
+                .build()
+                .post()
+                .uri("/Sys/v1/logistics/{s}",s)
+                .retrieve()//请求结果的方法
+                .bodyToMono(String.class);//将结果转换为相应的类型，这是String，直接返回即可
+
+        String result = momoStr.block();
+
+        if(result.equals("true")){
             return new JsonResult<>(HttpStatus.HTTP_CREATED,"提交物流状态成功");
         }else{
             return new JsonResult<>(HttpStatus.HTTP_INTERNAL_ERROR,"提交物流状态失败");
         }
     }
 
-    // 根据oid显示其所有物流信息
+    // 根据oid显示其所有物流信息（调用logistics服务）
     @GetMapping("/v1/logistics/{oid}")
     @ResponseBody
     public String showAllLogisticsByOid(@PathVariable("oid") String oid){
         log.info("sleuth跟踪日志");
-        List<Logistics> logistics_list = orderMapper.showAllLogisticsByOid(Integer.parseInt(oid));
-        List<Map<String, String>> list = new ArrayList<>();
-        DateFormat dateformat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        // 存入map
-        for(Logistics logistics:logistics_list) {
-            Map<String, String> map = new HashMap<>();
-            map.put("recordTime", dateformat.format(logistics.getRecordTime()));
-            map.put("location", logistics.getLocation());
-            list.add(map);
-        }
+        Mono<String> momoStr = clientBuilder
+                .baseUrl("http://logistics")//指定url，service-1是我们注册的微服务applications.name
+                .build()
+                .get()
+                .uri("/Sys/v1/logistics/{oid}",oid)
+                .retrieve()//请求结果的方法
+                .bodyToMono(String.class);//将结果转换为相应的类型，这是String，直接返回即可
 
-        int total = list.size();
-        Layui l = Layui.data(String.valueOf(HttpStatus.HTTP_OK),total,list);
-        return JSON.toJSONString(l);
+        return momoStr.block();
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
     }
 
