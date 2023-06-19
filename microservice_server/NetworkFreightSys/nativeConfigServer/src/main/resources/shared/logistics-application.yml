@@ -4,7 +4,7 @@ spring:
     username: root
     password: Zjq123789
   application:
-    name: order
+    name: logistics
   sleuth:
     web:
       client:
@@ -18,9 +18,10 @@ spring:
   cloud:
     stream:
       bindings:
-        output:
+        input:
           destination: twostepsfromjava-cloud-logisticstopic
           content-type: application/json
+          group: logisticsGroup
       kafka:
         binder:
           brokers: localhost
@@ -28,7 +29,7 @@ spring:
           zkNodes: localhost
 
 server:
-  port: 8082
+  port: 8083
 
 mybatis:
   #    config-location: classpath:mybatis/mybatis-config.xml

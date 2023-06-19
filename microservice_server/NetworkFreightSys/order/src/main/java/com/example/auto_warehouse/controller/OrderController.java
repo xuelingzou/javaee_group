@@ -15,9 +15,14 @@ import com.example.auto_warehouse.service.IncomeService;
 
 import com.example.auto_warehouse.util.JsonResult;
 import com.example.auto_warehouse.util.Layui;
+import com.example.auto_warehouse.util.LogisticsMsg;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.http.HttpMethod;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -36,10 +41,13 @@ import java.util.concurrent.atomic.AtomicReference;
 public class OrderController {
 
     private final WebClient.Builder clientBuilder;
+    protected Logger logger = LoggerFactory.getLogger(OrderController.class);
+    private final Source source;
 
     @Autowired
-    public OrderController(WebClient.Builder clientBuilder) {
-        this.clientBuilder = clientBuilder;;
+    public OrderController(WebClient.Builder clientBuilder,Source source) {
+        this.clientBuilder = clientBuilder;
+        this.source = source;
     }
 
 
@@ -467,8 +475,21 @@ public class OrderController {
         //return new JsonResult<>(HttpStatus.HTTP_OK,list);
     }
 
+    /**
+     * 具体消息发送的实现
+     * @param msgAction 消息类型
+     * @param itemCode 参数（oid,location）
+     */
+    protected void sendMsg(String msgAction, String itemCode) {
+        LogisticsMsg logisticsMsg = new LogisticsMsg(msgAction, itemCode);
+        this.logger.info("发送物流消息:{} ", logisticsMsg);
 
-    // 承运商记录货物运输信息（调用logistics服务）
+        // 发送消息
+        this.source.output().send(MessageBuilder.withPayload(logisticsMsg).build());
+    }
+
+
+    // 承运商记录货物运输信息（使用kafka消息队列传递消息）
     @ResponseBody //加这个注解，则直接返回数据，而不是模板路径
     @PostMapping("/v1/logistics")
 //    public JsonResult<Logistics> addLogistics(@RequestParam("oid")String oid1,@RequestParam("location")String location){
@@ -478,21 +499,9 @@ public class OrderController {
         String location = map1.get("location");
         String s = oid1+","+location;
 
-        Mono<String> momoStr = clientBuilder
-                .baseUrl("http://logistics")//指定url，service-1是我们注册的微服务applications.name
-                .build()
-                .post()
-                .uri("/Sys/v1/logistics/{s}",s)
-                .retrieve()//请求结果的方法
-                .bodyToMono(String.class);//将结果转换为相应的类型，这是String，直接返回即可
-
-        String result = momoStr.block();
-
-        if(result.equals("true")){
-            return new JsonResult<>(HttpStatus.HTTP_CREATED,"提交物流状态成功");
-        }else{
-            return new JsonResult<>(HttpStatus.HTTP_INTERNAL_ERROR,"提交物流状态失败");
-        }
+        // 发送物流消息
+        this.sendMsg(LogisticsMsg.MA_UPDATE, s);
+        return new JsonResult<>(HttpStatus.HTTP_CREATED,"提交物流状态成功");
     }
 
     // 根据oid显示其所有物流信息
