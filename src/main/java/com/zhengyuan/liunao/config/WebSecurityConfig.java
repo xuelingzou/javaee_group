@@ -35,15 +35,15 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter{
 	        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws IOException{
 	            HttpSession session = request.getSession(true);
 	            //判断是否已有该用户登录的session
-//	            if(session.getAttribute("name") !=null){
-//	                return  true;
-//	            }
-//	            //跳转到登录页
-//
-//	            String url = "/Sys/loginView";
-//	            response.sendRedirect(url);
-//	            return false;
-				return true;
+	            if(session.getAttribute("name") !=null){
+	                return  true;
+	            }
+	            //跳转到登录页
+
+	            String url = "/Sys/loginView";
+	            response.sendRedirect(url);
+	            return false;
+				//return true;
 
 	        }
 	    }
