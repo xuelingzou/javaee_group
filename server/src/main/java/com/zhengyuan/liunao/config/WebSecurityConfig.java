@@ -24,10 +24,10 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter{
 	    public  void addInterceptors(InterceptorRegistry registry){
 	        InterceptorRegistration addInterceptor = registry.addInterceptor(getSecurityInterceptor());
 	 
-//	        //排除配置
-//	        addInterceptor.excludePathPatterns("/Sys/loginView","/Sys/clientAdd","/Sys/companyAdd","/Sys/dealLogin","/Sys/css/**","/Sys/fonts/**","/Sys/images/**","/Sys/js/**","/Sys/lau/**","/Sys/lib/**");
-//	        //拦截配置
-//	        addInterceptor.addPathPatterns("/**/**");
+	        //排除配置
+	        addInterceptor.excludePathPatterns("/Sys/loginView","/Sys/clientAdd","/Sys/companyAdd","/Sys/dealLogin","/Sys/css/**","/Sys/fonts/**","/Sys/images/**","/Sys/js/**","/Sys/lau/**","/Sys/lib/**");
+	        //拦截配置
+	        addInterceptor.addPathPatterns("/**/**");
 	    }
 	 
 	    private class SecurityInterceptor extends HandlerInterceptorAdapter {
@@ -40,10 +40,10 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter{
 	            }
 	            //跳转到登录页
 
-//	            String url = "http://localhost:8081/";
-//	            response.sendRedirect(url);
-//	            return false;
-	            return true;
+	            String url = "http://localhost:8081/";
+	            response.sendRedirect(url);
+	            return false;
+	            //return true;
 
 
 	        }
