@@ -32,7 +32,7 @@ public class DeptServiceImpl implements DeptService {
     }
     // 当服务出现故障后，调用该方法给出友好提示
     public String dept_TimeoutHandler(Integer id) {
-        return  "C语言中文网提醒您，系统繁忙请稍后再试！"+"线程池：" + Thread.currentThread().getName() + "  deptInfo_Timeout,id:   " + id;
+        return  "提醒您，系统繁忙请稍后再试！"+"线程池：" + Thread.currentThread().getName() + "  deptInfo_Timeout,id:   " + id;
     }
 
 
@@ -56,7 +56,7 @@ public class DeptServiceImpl implements DeptService {
     }
     //deptCircuitBreaker 的降级方法
     public String deptCircuitBreaker_fallback(Integer id) {
-        return "c语言中文网提醒您，id 不能是负数,请稍后重试!\t id:" + id;
+        return "提醒您，id 不能是负数,请稍后重试!\t id:" + id;
     }
 
 

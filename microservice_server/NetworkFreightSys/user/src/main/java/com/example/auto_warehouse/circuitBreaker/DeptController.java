@@ -22,15 +22,15 @@ public class DeptController {
     @Value("${server.port}")
     private String serverPort;
 
-//    Logger log =  Logger.getLogger(String.valueOf(DeptController.class));
-    @RequestMapping(value = "/dept/hystrix/ok/{id}")
+
+    @RequestMapping(value = "/dept/ok/{id}")
     public String deptInfo_Ok(@PathVariable("id") Integer id) {
         String result = deptService.deptInfo_Ok(id);
         System.out.println("端口号：" + serverPort + " result:" + result);
         return result + "，   端口号：" + serverPort;
     }
-    // Hystrix 服务超时降级
-    @RequestMapping(value = "/dept/hystrix/timeout/{id}")
+
+    @RequestMapping(value = "/dept/timeout/{id}")
     public String deptInfo_Timeout(@PathVariable("id") Integer id) {
         String result = deptService.deptInfo_Timeout(id);
         System.out.println("端口号：" + serverPort + " result:" + result);
@@ -38,7 +38,7 @@ public class DeptController {
     }
 
     // Hystrix 服务熔断
-    @RequestMapping(value = "/dept/hystrix/circuit/{id}")
+    @RequestMapping(value = "/dept/circuit/{id}")
     public String deptCircuitBreaker(@PathVariable("id") Integer id){
         String result = deptService.deptCircuitBreaker(id);
 
