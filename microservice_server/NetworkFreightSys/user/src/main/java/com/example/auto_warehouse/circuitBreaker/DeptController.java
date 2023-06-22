@@ -1,4 +1,4 @@
-package com.example.auto_warehouse.hystrix;
+package com.example.auto_warehouse.circuitBreaker;
 
 
 

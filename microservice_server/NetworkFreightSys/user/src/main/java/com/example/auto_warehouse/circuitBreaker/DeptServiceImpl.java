@@ -1,4 +1,4 @@
-package com.example.auto_warehouse.hystrix;
+package com.example.auto_warehouse.circuitBreaker;
 
 import cn.hutool.core.util.IdUtil;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
