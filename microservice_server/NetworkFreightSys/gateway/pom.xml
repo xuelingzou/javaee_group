@@ -51,6 +51,13 @@
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
 
+<!--    断路器    -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+        </dependency>
+
+
     </dependencies>
 
 </project>
