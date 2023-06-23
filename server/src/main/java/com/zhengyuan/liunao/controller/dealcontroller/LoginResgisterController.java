@@ -10,6 +10,7 @@ import cn.hutool.http.HttpStatus;
 import com.zhengyuan.liunao.entity.Client;
 import com.zhengyuan.liunao.entity.Order;
 import com.zhengyuan.liunao.tools.JsonResult;
+import com.zhengyuan.liunao.tools.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -47,13 +48,22 @@ public class LoginResgisterController {
 			List<Admin> adminList = new ArrayList<>();
 			adminList = adminService.findAdmin(num, SecureUtil.md5(psw));
 			if (adminList.size() > 0) {
+				Admin user = adminList.get(0);
+				String token = JwtUtil.createToken(user);
+				System.out.println("---->这次登录的token:"+ token);
+
+
 				String account = adminList.get(0).getAccount();
 				String name = adminList.get(0).getName();
 				httpSession.setAttribute("account", account);
 				httpSession.setAttribute("name", name);
 				httpSession.setAttribute("photo", "admin.png");
 				httpSession.setAttribute("role", "admin");
-				dataJson = JSON.toJSONString(adminList);
+				httpSession.setAttribute("token", token);
+				map.put("name", user.getName());
+
+				map.put("token", token);
+				dataJson = JSON.toJSONString(map);
 				return dataJson;
 			}
 		} else if (Integer.parseInt(identify) == 2) { //客户
@@ -61,12 +71,21 @@ public class LoginResgisterController {
 			clientList = clientService.findClient(num, SecureUtil.md5(psw));
 			if (clientList.size() > 0) {
 //				使用httpSession来记录当前在线用户，之后从controller参数中获取HttpSession 对象，使用get方法获取属性值
+				Client user = clientList.get(0);
+				String token = JwtUtil.createToken(user);
+				System.out.println("---->这次登录的token:"+ token);
+
 				String name = clientList.get(0).getCeName();
 				String account = clientList.get(0).getCeid();
 				httpSession.setAttribute("account", account);
 				httpSession.setAttribute("name", name);
 				httpSession.setAttribute("role", "client");
-				dataJson = JSON.toJSONString(clientList);
+				httpSession.setAttribute("token", token);
+
+				map.put("name", user.getCeName());
+				map.put("token", token);
+				dataJson = JSON.toJSONString(map);
+
 
 				return dataJson;
 			}
@@ -74,12 +93,19 @@ public class LoginResgisterController {
 			List<Company> companyList = new ArrayList<>();
 			companyList = companyService.findCompany(num, SecureUtil.md5(psw));
 			if (companyList.size() > 0) {
+				Company user = companyList.get(0);
+				String token = JwtUtil.createToken(user);
+				System.out.println("---->这次登录的token:"+ token);
+
 				String name = companyList.get(0).getCoName();
 				String account = companyList.get(0).getCoid();
 				httpSession.setAttribute("account", account);
 				httpSession.setAttribute("name", name);
 				httpSession.setAttribute("role", "company");
-				dataJson = JSON.toJSONString(companyList);
+				httpSession.setAttribute("token", token);
+				map.put("name", user.getCoName());
+				map.put("token", token);
+				dataJson = JSON.toJSONString(map);
 
 				return dataJson;
 			}

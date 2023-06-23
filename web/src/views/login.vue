@@ -112,6 +112,9 @@ import router from "../router"
         //
         // },
         mounted () {
+          //   清空用户缓存，特别是token数据
+          window.sessionStorage.clear()
+
             // this.$nextTick(() => {
                 const layui = window.layui;
                 layui.use('form', function() {
@@ -130,22 +133,26 @@ import router from "../router"
                                 "/api/Sys/v1/users/login",
                                 {num,psw,identify}
                             ).then(data => {
-                                // console.log(data)
+                                console.log(data)
                                 //接受数据
                                 // let  data = res.data;
                                 if (data !== "fail") {
                                     layer.msg("登录成功！！！", function() {
 
-                                        if(identify ==='0'){
+                                      //保存用户信息
+                                      window.sessionStorage.setItem("access-user",JSON.stringify(data))
+
+
+                                      if(identify ==='0'){
                                         // location.href="/adminIndex"
-                                            router.push({path:'/adminIndex',query: {account:data[0].account,name:data[0].name,identify:identify}})
+                                            router.push({path:'/adminIndex',query: {account:num,name:data.name,identify:identify}})
                                     }else if(identify === '1'){
-                                            router.push({path:'/companyIndex',query: {id:num,name:data[0].coName,identify:identify}})
+                                            router.push({path:'/companyIndex',query: {id:num,name:data.name,identify:identify}})
 
                                             // location.href="/companyIndex"
                                     }else if(identify === '2'){
                                             // this.$router.push({path:'/clientIndex',query: {id:num,identify:identify}})
-                                            router.push({path:'/clientIndex',query: {id:num,name:data[0].ceName,identify:identify}})
+                                            router.push({path:'/clientIndex',query: {id:num,name:data[0].name,identify:identify}})
                                         // location.href="/clientIndex"
 
                                     }
