@@ -64,6 +64,10 @@ const routes = [
     path: '/comOrderManage',
     name: 'comOrderManage',
     component: () => import('../components/company/comOrderManage.vue')
+  }, {
+    path: '/comOrderManage2',
+    name: 'comOrderManage2',
+    component: () => import('../components/company/comOrderManage_copy.vue')
   },{
     path: '/clientModi',
     name: 'clientModi',

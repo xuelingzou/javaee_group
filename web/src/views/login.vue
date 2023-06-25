@@ -152,7 +152,7 @@ import router from "../router"
                                         // location.href="/companyIndex"
                                       }else if(identify === '2'){
                                         // this.$router.push({path:'/clientIndex',query: {id:num,identify:identify}})
-                                        router.push({path:'/clientIndex',query: {id:num,name:data[0].name,identify:identify}})
+                                        router.push({path:'/clientIndex',query: {id:num,name:data.name,identify:identify}})
                                         // location.href="/clientIndex"
 
                                       }
