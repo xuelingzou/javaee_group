@@ -116,7 +116,7 @@
             <el-button
                 v-if="scope.row.state ==='已接单'"
                 size="mini"
-                type="primary"
+                type="success"
                 @click="send(scope.$index, scope.row)" >发货</el-button>
             <el-button
                 v-if="scope.row.state !=='已到达'"
