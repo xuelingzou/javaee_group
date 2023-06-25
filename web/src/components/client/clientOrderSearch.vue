@@ -12,7 +12,7 @@
     <table id="test" lay-filter="test">
         <script  type="text/html" id ="barDemo">
 
-            <a class="layui-btn layui-btn-xs"   lay-event="findLogistic"  v-if="state ==='物流'">查看物流</a>
+            <a class="layui-btn layui-btn-xs"   lay-event="findLogistic" >查看物流</a>
         </script>
     </table>
 

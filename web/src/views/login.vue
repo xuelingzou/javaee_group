@@ -98,19 +98,7 @@ import router from "../router"
 
             }
         },
-        // setup () {
-        //     // const store = useStore();
-        //     // return {
-        //     //     // 在 computed 函数中访问 state
-        //     //     getId: computed(() => store.state.userInfo.id),
-        //     //
-        //     //     // 在 computed 函数中访问 getter
-        //     //     getIdentify: computed(() => store.state.userInfo.identify),
-        //     //     setInfo: (num,identify) =>store.commit('setInfo', num,identify)
-        //     // }
-        //
-        //
-        // },
+
         mounted () {
             // this.$nextTick(() => {
                 const layui = window.layui;
@@ -136,19 +124,23 @@ import router from "../router"
                                 if (data !== "fail") {
                                     layer.msg("登录成功！！！", function() {
 
-                                        if(identify ==='0'){
-                                        // location.href="/adminIndex"
-                                            router.push({path:'/adminIndex',query: {account:data[0].account,name:data[0].name,identify:identify}})
-                                    }else if(identify === '1'){
-                                            router.push({path:'/companyIndex',query: {id:num,name:data[0].coName,identify:identify}})
+                                      //保存用户信息
+                                      window.sessionStorage.setItem("access-user",JSON.stringify(data))
 
-                                            // location.href="/companyIndex"
-                                    }else if(identify === '2'){
-                                            // this.$router.push({path:'/clientIndex',query: {id:num,identify:identify}})
-                                            router.push({path:'/clientIndex',query: {id:num,name:data[0].ceName,identify:identify}})
+
+                                      if(identify ==='0'){
+                                        // location.href="/adminIndex"
+                                        router.push({path:'/adminIndex',query: {account:num,name:data.name,identify:identify}})
+                                      }else if(identify === '1'){
+                                        router.push({path:'/companyIndex',query: {id:num,name:data.name,identify:identify}})
+
+                                        // location.href="/companyIndex"
+                                      }else if(identify === '2'){
+                                        // this.$router.push({path:'/clientIndex',query: {id:num,identify:identify}})
+                                        router.push({path:'/clientIndex',query: {id:num,name:data.name,identify:identify}})
                                         // location.href="/clientIndex"
 
-                                    }
+                                      }
                                     });//layer.msg
                                 } else {
                                     layui.use('layer', function() {

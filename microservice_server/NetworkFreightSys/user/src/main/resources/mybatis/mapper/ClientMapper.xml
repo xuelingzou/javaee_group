@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.auto_warehouse.mapper.ClientMapper">
 	<select id="findClient" resultType="com.example.auto_warehouse.bean.Client">
-		select * from myscoremanage.client where ceid=#{0} and psw = #{1}
+		select * from myscoremanage.client where ceid=#{ceid} and psw = #{psw}
 	</select>
 
 	<select id="findAllClient" resultType="com.example.auto_warehouse.bean.Client">

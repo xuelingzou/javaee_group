@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.auto_warehouse.mapper.CompanyMapper">
     <select id="findCompany" resultType="com.example.auto_warehouse.bean.Company">
-      select * from myscoremanage.company where coid=#{0} and psw=#{1}
+      select * from myscoremanage.company where coid=#{coid} and psw=#{psw}
     </select>
 
 	<insert id="addCompany" >
