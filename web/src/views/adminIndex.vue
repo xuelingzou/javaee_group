@@ -11,7 +11,7 @@
         </div>
         <ul class="layui-nav right" >
             <li class="layui-nav-item"><a href="javascript:">当前用户:
-                <span>{{$route.query.name}}</span>
+                <span>{{ $route.query.name }}</span>
 
 
             </a>
@@ -105,8 +105,14 @@
 
 
     import adminOrderSearch from "@/components/admin/orderManage/adminOrderSearch";
+    import router from "../router";
     export default {
         name: "adminIndex",
+      methods: {
+        router() {
+          return router
+        }
+      },
         data(){
             return{
                 showComponent:0,  //用于显示组件

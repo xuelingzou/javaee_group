@@ -123,10 +123,10 @@
 
         <!--    断路器配置,实现服务降级和熔断机制    -->
         <!--添加 Spring Boot 的监控模块-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--        </dependency>-->
 <!--        hystrix 依赖-->
 <!--                <dependency>-->
 <!--                    <groupId>org.springframework.cloud</groupId>-->
@@ -161,6 +161,14 @@
             <artifactId>hutool-all</artifactId>
             <version>5.4.4</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.example</groupId>-->
+<!--            <artifactId>gateway</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+
 
 
     </dependencies>

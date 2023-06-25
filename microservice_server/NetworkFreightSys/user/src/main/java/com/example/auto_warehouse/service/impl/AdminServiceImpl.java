@@ -18,6 +18,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Admin> findAdmin(String account, String psw) {
 		// TODO Auto-generated method stub
+		System.out.println(account+" "+psw);
 		return adminMapper.findAdmin(account, psw);
 	}
 
