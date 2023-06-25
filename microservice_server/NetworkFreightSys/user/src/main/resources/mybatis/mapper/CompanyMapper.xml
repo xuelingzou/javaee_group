@@ -19,7 +19,7 @@
     </select>
     
 	<select id="findCompanyByName" resultType="com.example.auto_warehouse.bean.Company">
-        select * from myscoremanage. company where coName like CONCAT(CONCAT('%',#{0}),'%') limit #{1},#{2}
+        select * from myscoremanage. company where coName like CONCAT(CONCAT('%',#{coName}),'%') limit #{start},#{pagesize}
     </select>
 
 
@@ -40,7 +40,7 @@
 	</delete>
 	
 	<delete id="deleteCompany">
-	 	delete  from myscoremanage.company where coid = #{0}
+	 	delete  from myscoremanage.company where coid = #{coid}
 	</delete>
 
 	<select id = "getCompanyByNum" resultType="com.example.auto_warehouse.bean.Company">

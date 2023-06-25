@@ -16,7 +16,7 @@
 	</insert>
 
 	<select id="findClientByName" resultType="com.example.auto_warehouse.bean.Client">
-		select * from myscoremanage. client where ceName like CONCAT(CONCAT('%',#{0}),'%') limit #{1},#{2}
+		select * from myscoremanage. client where ceName like CONCAT(CONCAT('%',#{ceName}),'%') limit #{start},#{pagesize}
 	</select>
 
 	<select id="ClientCount" resultType="Integer">
@@ -47,7 +47,7 @@
 	</delete>
 
 	<delete id="deleteClient">
-		delete from myscoremanage.client where ceid = #{0}
+		delete from myscoremanage.client where ceid = #{ceid}
 	</delete>
 
 </mapper>
