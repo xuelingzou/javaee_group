@@ -8,7 +8,10 @@
 
 
     <table id="test" lay-filter="test"></table>
+      <script  type="text/html" id ="barDemo">
 
+        <a class="layui-btn layui-btn-xs"   lay-event="findLogistic"  >查看物流</a>
+      </script>
     </div>
 
 </template>
@@ -52,12 +55,40 @@
                             ,{field:'submitTime',title:'提交订单时间',sort:true,width: 150}
                             ,{field:'sendTime',title:'发货时间',sort:true,width: 150}
                             ,{field:'receiveTime',title:'到达时间',sort:true,width: 150}
+                          ,{ title:'操作', align:'center', toolbar: '#barDemo',fixed: 'right',width: 100}
 
 
                         ]
                     ]
 
                 });
+
+              //工具条事件
+              table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                const data = obj.data; //获得当前行数据
+                const layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                const tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+                const oid =  data.oid
+
+                if (layEvent === 'findLogistic'){//  查看物流信息
+
+                  layer.open({
+                    type: 2,
+                    title: '物流信息（oid：'+oid+')',
+                    skin: 'layui-layer-molv',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area:  ['400px', '500px'],
+                    content: 'logisticsInfo?oid='+oid,
+
+                  });
+
+
+                }
+
+
+              });//工具条事件
 
 
                 $('.layui-btn').on('click', function(){

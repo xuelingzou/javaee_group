@@ -90,7 +90,7 @@
 <!--主体内容-->
             <div id ="mainContainer" class="layui-tab-content">
                 <comOrderSearch v-if="showComponent===1" ></comOrderSearch>
-                <comOrderManage v-if="showComponent===2" ></comOrderManage>
+                <comOrderManage2 v-if="showComponent===2" ></comOrderManage2>
                 <incomeBar v-if="showComponent===3"></incomeBar>
 
             </div>
@@ -110,7 +110,7 @@
 
 <script>
     import comOrderSearch from "../components/company/comOrderSearch";
-    import comOrderManage from "@/components/company/comOrderManage";
+    import comOrderManage2 from "@/components/company/comOrderManage_copy";
     import incomeBar from "@/components/company/incomeBar";
 
     import router from "../router"
@@ -119,7 +119,7 @@
         name: "companyIndex",
         components:{
             comOrderSearch,
-            comOrderManage,
+            comOrderManage2,
             incomeBar
         },
         data(){
