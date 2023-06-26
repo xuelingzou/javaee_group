@@ -12,3 +12,7 @@ github仓库地址：
 https://github.com/xuelingzou/javaee_group
 
 四次作业分别在四个分支中，已用分支名字区分。
+
+关于四次作业的完成情况说明，已在master分支中的“javaee四次作业完成情况说明对照文档.docx”中说明，请老师下载查看~
+
+每次作业分支中都有对应的系统设计和测试运行截图文档。
