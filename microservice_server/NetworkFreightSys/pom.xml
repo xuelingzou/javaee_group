@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>user</module>
-        <module>security</module>
+        <module>oauth2Server</module>
         <module>eureka</module>
         <module>gateway</module>
         <module>order</module>

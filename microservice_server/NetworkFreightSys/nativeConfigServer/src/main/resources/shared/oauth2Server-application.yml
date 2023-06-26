@@ -1,0 +1,18 @@
+server:
+  port: 8110
+
+security:
+  user:
+    name: admin
+    password: 123456
+  oauth2:
+    client:
+      client-id: net5ijy
+      client-secret: 123456
+
+
+# eureka配置 客户端配置，注册到服务中心
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
