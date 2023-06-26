@@ -30,7 +30,8 @@ public class FinanceController {
 	@ResponseBody
 	public JsonResult<double[]> getGscomp(HttpSession httpSession, @RequestBody Map<String,String> map1) {
 		log.info("sleuth跟踪日志");
-		String coid = (String) httpSession.getAttribute( "account");
+		//String coid = (String) httpSession.getAttribute( "account");
+		String coid = map1.get("account");
 		int year = Integer.parseInt(map1.get("year"));
 		List<Income> incomes = incomeService.selectMonthIncome(coid,year*100);
 		Map<String, Double> map = new HashMap<>();
