@@ -73,13 +73,17 @@
   
   
   <script>
+      let access_user = window.sessionStorage.getItem('token')
+      let token = JSON.parse(access_user);
 
-  layui.use('table', function(){
+
+      layui.use('table', function(){
       var table = layui.table;
       table.render({
           elem: '#test'  //绑定table表格
           ,id:'teaInfo'
           ,method:'post'
+          ,headers:{"token":token}
           ,url: 'getCompanySimpleInfo' //后台springmvc接收路径
           ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
   	        layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -109,8 +113,9 @@
     		      table.reload('teaInfo', {
     		        page: {
     		          curr: 1 //重新从第 1 页开始
-    		        },
-    		    url:'getCompanyByName'
+    		        }
+                      ,headers:{"token":token}
+    		    ,url:'getCompanyByName'
     		        ,where: {
     		          key: {
     		            id: demoReload.val()
@@ -146,6 +151,9 @@
                       url:'deleteCompany',
                       data:{'num':num},
                       type:'post',
+                      beforeSend: function(request) {
+                          request.setRequestHeader("token", token);
+                      },
                       success:function(data){
                           if(data==="success"){
                               parent.layer.msg('删除成功！', {icon: 1,time:2000,shade:0.2});
@@ -217,6 +225,9 @@
               url:'deleteCompanys',
               data:{'nums':nums},
               type:'post',
+              beforeSend: function(request) {
+                  request.setRequestHeader("token", token);
+              },
               success:function(data){
                   if(data==="success"){
                       parent.layer.msg('删除成功！', {icon: 1,time:2000,shade:0.2});

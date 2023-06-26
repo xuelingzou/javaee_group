@@ -68,12 +68,17 @@
 </body>
 <script src="/Sys/lib/layui/layui.js"></script>
 <script th:inline="javascript">
+    sessionStorage.setItem()
 
     layui.use(['jquery','form'], function() {
 
         var form = layui.form;
         //监听提交
         form.on('submit(register)', function(data) {
+            let access_user = window.sessionStorage.getItem('token')
+            let token = JSON.parse(access_user);
+
+
             var loginjson=(data.field);
 
             data=JSON.stringify(loginjson)
@@ -85,6 +90,9 @@
                 type:'POST',
                 dateType:'json',
                 contentType : 'application/json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("token", token);
+                },
                 success:function(data){
                     if(data=="success"){
                         layer.msg("注册成功！",function(){

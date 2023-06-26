@@ -79,6 +79,10 @@
 	var chart = document.getElementById('main');
 	var echart = echarts.init(chart);
 
+	let access_user = window.sessionStorage.getItem('token')
+	let token = JSON.parse(access_user);
+
+
 
 	//生成图形
 	function buildChart(columName, columnValue) {
@@ -157,6 +161,9 @@
 		type: "post",
 		async: true, //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
 		url: "getGscomp", //请求发送到TestServlet处
+		beforeSend: function(request) {
+			request.setRequestHeader("token", token);
+		},
 		data: {
 			"year": year,
 
@@ -200,6 +207,9 @@
 					data: {
 						"year": year,
 
+					},
+					beforeSend: function(request) {
+						request.setRequestHeader("token", token);
 					},
 					dataType: "json", //返回数据形式为json
 					success: function (result) {

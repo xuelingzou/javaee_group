@@ -72,12 +72,20 @@
 </body>
 <script src="/Sys/lib/layui/layui.js"></script>
 <script  th:inline="javascript">
-   $(function(){
+
+    let access_user = window.sessionStorage.getItem('token')
+    let token = JSON.parse(access_user);
+
+
+    $(function(){
 	  var num= [[${num}]];
 	  $.ajax({
 		  url:'getClientByNum',
 		  type:'POST',
 		  data:{'num':num},
+          beforeSend: function(request) {
+              request.setRequestHeader("token", token);
+          },
 	  	  success:function(data){
 	  		const datajson = JSON.parse(data);
 	  		$("#ceid").val(datajson.data[0].ceid)
@@ -101,6 +109,9 @@
 	                 data : data,
 	                 type:'POST',
 	                 contentType: 'application/json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader("token", token);
+                    },
 	                 success:function(data){
 	                	 layer.msg("修改成功！",function(){
 

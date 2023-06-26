@@ -68,8 +68,11 @@
 </body>
 <script src="/Sys/lib/layui/layui.js"></script>
 <script th:inline="javascript">
+    let access_user = window.sessionStorage.getItem('token')
+    let token = JSON.parse(access_user);
 
-	   layui.use(['jquery','form'], function() {
+
+    layui.use(['jquery','form'], function() {
 
            var form = layui.form;
            //监听提交
@@ -82,7 +85,10 @@
 	               	 url : "/Sys/registerCompanyDeal",
 	                 data : data,
 	                 type:'POST',
-	                 dateType:'json', 
+	                 dateType:'json',
+                    beforeSend: function(request) {
+                        request.setRequestHeader("token", token);
+                    },
 	                 contentType : 'application/json',
 	                 success:function(data){
 	                	if(data=="success"){

@@ -12,6 +12,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.zhengyuan.liunao.entity.Company;
 
 public class JwtUtil {
     /**
@@ -56,6 +57,22 @@ public class JwtUtil {
                 //可以将基本信息放到claims中
                 .withClaim("id", admin.getAccount())//userId
                 .withClaim("password", admin.getPsw())//password
+                .withExpiresAt(expireDate) //超时设置,设置过期的日期
+                .withIssuedAt(new Date()) //签发时间
+                .sign(Algorithm.HMAC256(SECRET)); //SECRET加密
+        return token;
+    }
+    public static String createToken(Company company) {
+        //过期时间
+        Date expireDate = new Date(System.currentTimeMillis() + EXPIRATION * 1000);
+        Map<String, Object> map = new HashMap<>();
+        map.put("alg", "HS256");
+        map.put("typ", "JWT");
+        String token = JWT.create()
+                .withHeader(map)// 添加头部
+                //可以将基本信息放到claims中
+                .withClaim("id", company.getCoid())//userId
+                .withClaim("password", company.getPsw())//password
                 .withExpiresAt(expireDate) //超时设置,设置过期的日期
                 .withIssuedAt(new Date()) //签发时间
                 .sign(Algorithm.HMAC256(SECRET)); //SECRET加密

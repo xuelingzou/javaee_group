@@ -47,6 +47,10 @@
 
 
 <script >
+
+    let access_user = window.sessionStorage.getItem('token')
+    let token = JSON.parse(access_user);
+
     var documentWidth = $(document).width();
     layui.use(['table','form'],function(){
         var table = layui.table;
@@ -54,6 +58,7 @@
             elem: '#test'  //绑定table表格
             ,id:'csInfo'
             ,method:'post'
+            ,headers:{"token":token}
             ,url: 'findOrderWaitReceive' //后台springmvc接收路径
             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -104,6 +109,10 @@
                         url:'receiveOrder',
                         data:{'oid':oid},
                         type:'post',
+
+                        beforeSend: function(request) {
+                            request.setRequestHeader("token", token);
+                        },
                         success:function(data){
                             if(data==="接单成功"){
                                 parent.layer.msg('接单成功！', {icon: 1,time:2000,shade:0.2});

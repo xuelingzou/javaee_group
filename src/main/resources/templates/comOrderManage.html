@@ -52,6 +52,11 @@
 
 
 <script >
+
+    let access_user = window.sessionStorage.getItem('token')
+    let token = JSON.parse(access_user);
+
+
     var documentWidth = $(document).width();
     layui.use(['table','form',"laytpl"],function(){
         const table = layui.table;
@@ -60,6 +65,7 @@
             elem: '#test'  //绑定table表格
             ,id:'csInfo'
             ,method:'post'
+            ,headers:{"token":token}
             ,url: 'findOrderByCoid' //后台springmvc接收路径
             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -111,6 +117,9 @@
                         url:'sendCargo',
                         data:{'oid':oid},
                         type:'post',
+                        beforeSend: function(request) {
+                            request.setRequestHeader("token", token);
+                        },
                         success:function(data){
                             if(data==="发货成功"){
                                 parent.layer.msg('发货成功！', {icon: 1,time:2000,shade:0.2});
@@ -129,6 +138,9 @@
                         url:'receiveCargo',
                         data:{'oid':oid},
                         type:'post',
+                        beforeSend: function(request) {
+                            request.setRequestHeader("token", token);
+                        },
                         success:function(data){
                             if(data==="货物已送达"){
                                 parent.layer.msg('货物已送达！', {icon: 1,time:2000,shade:0.2});

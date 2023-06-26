@@ -44,10 +44,19 @@
     var documentWidth = $(document).width();
     layui.use(['table','form'],function(){
         var table = layui.table;
+
+
+        let access_user = window.sessionStorage.getItem('token')
+        let token = JSON.parse(access_user);
+
+        console.log("token:"+token)
+
+
         table.render({
             elem: '#test'  //绑定table表格
             ,id:'csInfo'
             ,method:'post'
+            ,headers:{"token":token} //加入token请求头
             ,url: 'showAllOrder' //后台springmvc接收路径
             ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
                 layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局

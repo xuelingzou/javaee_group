@@ -133,6 +133,10 @@
 </body>
 <script src="/Sys/lib/layui/layui.js"></script>
 <script>
+
+    let access_user = window.sessionStorage.getItem('token')
+    let token = JSON.parse(access_user);
+
     //Demo
     layui.use('form', function(){
         var form = layui.form;
@@ -146,6 +150,9 @@
                 data : data_json,
                 type:'POST',
                 contentType: 'application/json',
+                beforeSend: function(request) {
+                    request.setRequestHeader("token", token);
+                },
                 success:function(data){
                     layer.msg(data);
                 },

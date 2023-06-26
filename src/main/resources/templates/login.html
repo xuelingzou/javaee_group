@@ -110,8 +110,16 @@
 						url : "dealLogin",
 						data : logindata,
 						type : 'POST',
+
 						success : function(data) {
 							if (data !== "fail") {
+								console.log("data:"+data)
+
+								//保存用户信息
+								window.sessionStorage.setItem("token",JSON.stringify(data))
+
+
+
 								// layer.msg("登录成功！！！", function() {
 									if(identify ==='0'){
 										location.href="adminIndex"
