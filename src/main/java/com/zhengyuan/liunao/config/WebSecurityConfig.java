@@ -1,52 +1,45 @@
 package com.zhengyuan.liunao.config;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 
 @Configuration
-public class WebSecurityConfig extends WebMvcConfigurerAdapter{
-	public static final String SESSION_KEY="name";
-	 @Bean
-	    public SecurityInterceptor getSecurityInterceptor(){
-	        return  new SecurityInterceptor();
-	    }
-	    @Override
-	    public  void addInterceptors(InterceptorRegistry registry){
-	        InterceptorRegistration addInterceptor = registry.addInterceptor(getSecurityInterceptor());
-	 
-	        //排除配置
-	        addInterceptor.excludePathPatterns("/Sys/loginView","/Sys/clientAdd","/Sys/companyAdd","/Sys/dealLogin","/Sys/css/**","/Sys/fonts/**","/Sys/images/**","/Sys/js/**","/Sys/lau/**","/Sys/lib/**");
-	        //拦截配置
-	        addInterceptor.addPathPatterns("/**/**");
-	    }
-	 
-	    private class SecurityInterceptor extends HandlerInterceptorAdapter {
-	        @Override
-	        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws IOException{
-	            HttpSession session = request.getSession(true);
-	            //判断是否已有该用户登录的session
-	            if(session.getAttribute("name") !=null){
-	                return  true;
-	            }
-	            //跳转到登录页
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-	            String url = "/Sys/loginView";
-	            response.sendRedirect(url);
-	            return false;
-				//return true;
+	@Bean
+	@Override
+	protected UserDetailsService userDetailsService() {
 
-	        }
-	    }
+		return super.userDetailsService();
+	}
 
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication()
+				.withUser("admin")
+				.password("$2a$10$RMuFXGQ5AtH4wOvkUqyvuecpqUSeoxZYqilXzbz50dceRsga.WYiq") //123
+				.roles("admin")
+				.and()
+				.withUser("sang")
+				.password("$2a$10$RMuFXGQ5AtH4wOvkUqyvuecpqUSeoxZYqilXzbz50dceRsga.WYiq") //123
+				.roles("user");
+	}
 
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.antMatcher("/oauth/**").authorizeRequests()
+				.antMatchers("/oauth/**").permitAll()
+				.and().csrf().disable();
+	}
 }
